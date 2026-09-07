@@ -1,20 +1,22 @@
 {
-  "name": "mla-sales-tracker-client",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "leaflet": "^1.9.4"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.1",
-    "vite": "^5.4.1"
-  }
+    "name": "mla-sales-tracker-server",
+    "version": "1.0.0",
+    "description": "MLA Sales Tracker - Node.js + Express + MySQL backend",
+    "main": "server/index.js",
+    "scripts": {
+        "start": "node server/index.js",
+        "dev": "nodemon server/index.js",
+        "build:client": "cd client && npm install && npm run build",
+        "postinstall": "npm install --prefix client && npm run build --prefix client"
+    },
+    "dependencies": {
+        "express": "^4.19.2",
+        "mysql2": "^3.11.0",
+        "bcryptjs": "^2.4.3",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.4"
+    }
 }
