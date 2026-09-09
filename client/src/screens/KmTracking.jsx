@@ -74,8 +74,9 @@ export default function KmTracking({ employee, nav, toast }) {
 
   function onPositionUpdate(pos) {
     const { latitude, longitude, accuracy } = pos.coords;
-    if (accuracy && accuracy > 30) return; // weak GPS signal — skip this reading
 
+    // Always accept the very first fix so the map/marker can initialize,
+    // even if the GPS hasn't locked in with great accuracy yet.
     if (!lastLatLngRef.current) {
       trackStartLatLngRef.current = { lat: latitude, lng: longitude };
       mapInstance.current.setView([latitude, longitude], 16);
@@ -86,8 +87,11 @@ export default function KmTracking({ employee, nav, toast }) {
       return;
     }
 
+    // For later updates, skip only genuinely unreliable readings (very poor accuracy).
+    if (accuracy && accuracy > 60) return;
+
     const d = haversineKm(lastLatLngRef.current.lat, lastLatLngRef.current.lng, latitude, longitude);
-    if (d > 0.012) { // ignore GPS jitter under ~12 meters
+    if (d > 0.008) { // ignore GPS jitter under ~8 meters, but count real movement
       totalKmRef.current += d;
       routePointsRef.current.push([latitude, longitude]);
       polylineRef.current.setLatLngs(routePointsRef.current);
